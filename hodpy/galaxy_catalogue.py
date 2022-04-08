@@ -4,7 +4,7 @@ import h5py
 from scipy.interpolate import RegularGridInterpolator
 
 from hodpy.catalogue import Catalogue
-from hodpy.cosmology import CosmologyMXXL
+from hodpy.cosmology import CosmologyPino
 
 
 class GalaxyCatalogue(Catalogue):
@@ -347,7 +347,7 @@ class BGSGalaxyCatalogue(GalaxyCatalogue):
         self._quantities = {}
         self.size = 0
         self.haloes = haloes
-        self.cosmology = CosmologyMXXL()
+        self.cosmology = CosmologyPino()
 
         
     def add_colours(self, colour):

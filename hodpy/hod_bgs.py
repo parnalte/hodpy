@@ -7,8 +7,8 @@ from scipy.optimize import minimize, root
 
 from hodpy import luminosity_function
 from hodpy.luminosity_function import LuminosityFunctionTargetBGS
-from hodpy.mass_function import MassFunctionMXXL
-from hodpy.cosmology import CosmologyMXXL
+from hodpy.mass_function import MassFunctionPino
+from hodpy.cosmology import CosmologyPino
 from hodpy.k_correction import GAMA_KCorrection
 from hodpy import spline
 from hodpy.hod import HOD
@@ -57,8 +57,8 @@ class HOD_BGS(HOD):
     HOD class containing the HODs used to create the mock catalogue described in Smith et al. 2017
 
     args:
-        [mass_function]: hodpy.MassFunction object, the mass functino of the simulation (default is MassFunctionMXXL)
-        [cosmology]:     hodpy.Cosmology object, the cosmology of the simulation (default is CosmologyMXXL)
+        [mass_function]: hodpy.MassFunction object, the mass functino of the simulation (default is MassFunctionPino)
+        [cosmology]:     hodpy.Cosmology object, the cosmology of the simulation (default is CosmologyPino)
         [mag_faint]:     faint apparent magnitude limit (default is 20.0)
         [kcorr]:         hodpy.KCorrection object, the k-correction (default is GAMA_KCorrection)
         [hod_param_file]: location of file which contains HOD parameters
@@ -70,17 +70,17 @@ class HOD_BGS(HOD):
                                  doesn't already exist
         [target_lf_file]: location of file containing the target luminosity function. Will be created if the
                           file doesn't already exist
-        [sdss_lf_file]:  location of file which contains the SDSS luminosity function
+        [miniJPAS_lf_file]:  location of file which contains the SDSS luminosity function
         [lf_param_file]: location of file which contains the parameters of the evolving GAMA luminosity function
         [replace_central_lookup]: if set to True, will replace central_lookup_file even if the file exists
         [replace_satellite_lookup]: if set to True, will replace satellite_lookup_file even if the file exists
     """
 
-    def __init__(self, mass_function=MassFunctionMXXL(), cosmology=CosmologyMXXL(), mag_faint=20.0,
-                 kcorr=GAMA_KCorrection(CosmologyMXXL()), hod_param_file=lookup.bgs_hod_parameters, 
+    def __init__(self, mass_function=MassFunctionPino(), cosmology=CosmologyPino(), mag_faint=20.0,
+                 kcorr=GAMA_KCorrection(CosmologyPino()), hod_param_file=lookup.bgs_hod_parameters, 
                  slide_file=lookup.bgs_hod_slide_factors, central_lookup_file=lookup.central_lookup_file, 
                  satellite_lookup_file=lookup.satellite_lookup_file, target_lf_file=lookup.target_lf, 
-                 sdss_lf_file=lookup.sdss_lf_tabulated, lf_param_file=lookup.gama_lf_fits,
+                 miniJPAS_lf_file=lookup.miniJPAS_lf_tabulated, lf_param_file=lookup.gama_lf_fits,
                  replace_central_lookup=False, replace_satellite_lookup=False):
         
         self.Mmin_Ls, self.Mmin_Mt, self.Mmin_am, self.M1_Ls, self.M1_Mt, self.M1_am, \
@@ -89,7 +89,7 @@ class HOD_BGS(HOD):
         
         self.mf = mass_function
         self.cosmo = cosmology
-        self.lf = LuminosityFunctionTargetBGS(target_lf_file, sdss_lf_file, lf_param_file, 
+        self.lf = LuminosityFunctionTargetBGS(target_lf_file, miniJPAS_lf_file, lf_param_file, 
                                               HOD_BGS_Simple(hod_param_file))
         self.kcorr = kcorr
         self.mag_faint = mag_faint
@@ -349,8 +349,8 @@ class HOD_BGS(HOD):
         # use target LF to convert magnitude to number density
         n = self.lf.Phi_cumulative(magnitude, redshift)
 
-        # find magnitude at z0=0.1 which corresponds to the same number density
-        magnitude_z0 = self.lf.magnitude(n, np.ones(len(n))*0.1)
+        # find magnitude at z0=0.4 which corresponds to the same number density
+        magnitude_z0 = self.lf.magnitude(n, np.ones(len(n))*0.4)
 
         # find Mmin
         Mmin = 10**self.__logMmin_interpolator(magnitude_z0)
@@ -374,8 +374,8 @@ class HOD_BGS(HOD):
         # use target LF to convert magnitude to number density
         n = self.lf.Phi_cumulative(magnitude, redshift)
 
-        # find magnitude at z0=0.1 which corresponds to the same number density
-        magnitude_z0 = self.lf.magnitude(n, np.ones(len(n))*0.1)
+        # find magnitude at z0=0.4 which corresponds to the same number density
+        magnitude_z0 = self.lf.magnitude(n, np.ones(len(n))*0.4)
 
         # find M1
         M1 = 10**self.__logM1_interpolator(magnitude_z0)
@@ -400,8 +400,8 @@ class HOD_BGS(HOD):
         # use target LF to convert magnitude to number density
         n = self.lf.Phi_cumulative(magnitude, redshift)
 
-        # find magnitude at z0=0.1 which corresponds to the same number density
-        magnitude_z0 = self.lf.magnitude(n, np.ones(len(n))*0.1)
+        # find magnitude at z0=0.4 which corresponds to the same number density
+        magnitude_z0 = self.lf.magnitude(n, np.ones(len(n))*0.4)
         log_lum_z0 = np.log10(self.lf.mag2lum(magnitude_z0))
 
         # find M0
@@ -427,8 +427,8 @@ class HOD_BGS(HOD):
         # use target LF to convert magnitude to number density
         n = self.lf.Phi_cumulative(magnitude, redshift)
 
-        # find magnitude at z0=0.1 which corresponds to the same number density
-        magnitude_z0 = self.lf.magnitude(n, np.ones(len(n))*0.1)
+        # find magnitude at z0=0.4 which corresponds to the same number density
+        magnitude_z0 = self.lf.magnitude(n, np.ones(len(n))*0.4)
         log_lum_z0 = np.log10(self.lf.mag2lum(magnitude_z0))
 
         # find alpha
@@ -451,11 +451,11 @@ class HOD_BGS(HOD):
         # use target LF to convert magnitude to number density
         n = self.lf.Phi_cumulative(magnitude, redshift)
 
-        # find magnitude at z0=0.1 which corresponds to the same number density
-        magnitude_z0 = self.lf.magnitude(n, np.ones(len(n))*0.1)
+        # find magnitude at z0=0.4 which corresponds to the same number density
+        magnitude_z0 = self.lf.magnitude(n, np.ones(len(n))*0.4)
 
         # find sigma_logM
-        sigma = sigma_function(magnitude_z0, self.sigma_A, self.sigma_B, self.sigma_C, self.sigma_D)
+        sigma = sigma_function(magnitude, self.sigma_A, self.sigma_B, self.sigma_C, self.sigma_D)
 
         # sigma_logM is kept fixed with redshift
         return sigma
@@ -473,10 +473,15 @@ class HOD_BGS(HOD):
             array of mean number of central galaxies
         """
 
+        diff = log_mass-self.M0(magnitude, redshift, f)
+        central_n = np.int64(diff>0)
+        central_n = np.int64(diff<0)
+        #print(central_n);exit()
+        return central_n
         # use pseudo gaussian spline kernel
-        return spline.cumulative_spline_kernel(log_mass, 
-                mean=np.log10(self.Mmin(magnitude, redshift, f)), 
-                sig=self.sigma_logM(magnitude, redshift)/np.sqrt(2))
+        #return spline.cumulative_spline_kernel(log_mass, 
+        #        mean=np.log10(self.Mmin(magnitude, redshift, f)), 
+        #        sig=self.sigma_logM(magnitude, redshift)/np.sqrt(2))
 
 
     def number_satellites_mean(self, log_mass, magnitude, redshift, f=None):
@@ -531,7 +536,7 @@ class HOD_BGS(HOD):
         # mean number of satellites in each halo brighter than the
         # faint magnitude threshold
         number_mean = self.number_satellites_mean(log_mass, magnitude, redshift)
-        
+        print(number_mean) 
         # draw random number from Poisson distribution
         return np.random.poisson(number_mean)
 
@@ -581,7 +586,6 @@ class HOD_BGS(HOD):
         return halo_index, self.__satellite_interpolator(points)
 
 
-
     
 class HOD_BGS_Simple(HOD):
     """
@@ -595,7 +599,7 @@ class HOD_BGS_Simple(HOD):
             self.M0_A, self.M0_B, self.alpha_A, self.alpha_B, self.alpha_C, self.sigma_A, \
             self.sigma_B, self.sigma_C, self.sigma_D  = lookup.read_hod_param_file(hod_param_file)
         
-        self.mf = MassFunctionMXXL()
+        self.mf = MassFunctionPino()
 
         self.__logMmin_interpolator = \
             self.__initialize_mass_interpolator(self.Mmin_Ls, self.Mmin_Mt, 
@@ -635,9 +639,7 @@ class HOD_BGS_Simple(HOD):
         # the HOD parameters Mmin or M1 (at z=0.1) as a function of log_mass
         
         log_mass = np.arange(10, 16, 0.001)[::-1]
-
         magnitudes = M_function(log_mass, L_s, M_t, a_m)
-
         return RegularGridInterpolator((magnitudes,), log_mass,
                                        bounds_error=False, fill_value=None)
 
@@ -725,11 +727,15 @@ class HOD_BGS_Simple(HOD):
         Returns:
             array of mean number of central galaxies
         """
+        diff = log_mass-self.M0(magnitude, redshift, f)
+        central_n = np.int64(diff>0)
+        central_n = np.int64(diff<0)
+        return central_n
 
         # use pseudo gaussian spline kernel
-        return spline.cumulative_spline_kernel(log_mass, 
-                mean=np.log10(self.Mmin(magnitude, redshift, f)), 
-                sig=self.sigma_logM(magnitude, redshift)/np.sqrt(2))
+        #return spline.cumulative_spline_kernel(log_mass, 
+        #        mean=np.log10(self.Mmin(magnitude, redshift, f)), 
+        #        sig=self.sigma_logM(magnitude, redshift)/np.sqrt(2))
 
 
     def number_satellites_mean(self, log_mass, magnitude, redshift, f=1.0):

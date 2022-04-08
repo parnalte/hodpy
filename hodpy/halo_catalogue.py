@@ -2,7 +2,7 @@
 import numpy as np
 import h5py
 
-from hodpy.cosmology import CosmologyMXXL
+from hodpy.cosmology import CosmologyPino
 from hodpy.catalogue import Catalogue
 from hodpy import lookup
 
@@ -105,14 +105,14 @@ class HaloCatalogue(Catalogue):
     
     
 
-class MXXLCatalogue(HaloCatalogue):
+class PinoCatalogue(HaloCatalogue):
     """
-    MXXL halo lightcone catalogue
+    Pino halo lightcone catalogue
     """
 
     def __init__(self, file_name):
 
-        self.cosmology = CosmologyMXXL()
+        self.cosmology = CosmologyPino()
 
         # read halo catalogue file
         halo_cat = h5py.File(file_name, "r")
@@ -136,14 +136,14 @@ class MXXLCatalogue(HaloCatalogue):
     
 
 
-class MXXLSnapshot(HaloCatalogue):
+class PinoSnapshot(HaloCatalogue):
     """
-    MXXL halo catalogue from simulation snapshot
+    Pino halo catalogue from simulation snapshot
     """
 
-    def __init__(self, file_name, snapshot, snapshots_file=lookup.mxxl_snapshots):
+    def __init__(self, file_name, snapshot, snapshots_file=lookup.Pino_snapshots):
 
-        self.cosmology = CosmologyMXXL()
+        self.cosmology = CosmologyPino()
         
         #3rd column of the file contains z for snapshots 0 to 63
         self.snapshot_redshifts = np.loadtxt(snapshots_file, skiprows=1,
@@ -176,10 +176,10 @@ class MXXLSnapshot(HaloCatalogue):
     def snapshot_to_redshift(self, snapshot):
         """
         Returns the redshift corresponding to a snapshot number in
-        the MXXL simulation
+        the Pino simulation
 
         Args:
-            snapshots: integer, the MXXL snapshot number
+            snapshots: integer, the Pino snapshot number
         Returns:
             redshift
         """

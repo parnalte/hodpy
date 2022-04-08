@@ -26,22 +26,22 @@ class GAMA_KCorrection(KCorrection):
     Colour-dependent polynomial fit to the GAMA K-correction 
     (Fig. 13 of Smith+17), used to convert between SDSS r-band
     Petrosian apparent magnitudes, and rest frame absolute manigutues 
-    at z_ref = 0.1
+    at z_ref = 0.4
     
     Args:
         k_corr_file: file of polynomial coefficients for each colour bin
         cosmology: object of type hodpy.Cosmology
-        [z0]: reference redshift. Default value is z0=0.1
+        [z0]: reference redshift. Default value is z0=0.4
         [cubic_interpolation]: if set to True, will use cubic spline interpolation.
                                Default value is False (linear interpolation).
     """
-    def __init__(self, cosmology, k_corr_file=lookup.kcorr_file, z0=0.1, cubic_interpolation=False):
+    def __init__(self, cosmology, k_corr_file=lookup.kcorr_file, z0=0.4, cubic_interpolation=False):
         
         # read file of parameters of polynomial fit to k-correction
         cmin, cmax, A, B, C, D, E, cmed = \
             np.loadtxt(k_corr_file, unpack=True)
     
-        self.z0 = 0.1 # reference redshift
+        self.z0 = 0.4 # reference redshift
         self.cubic = cubic_interpolation
 
         # Polynomial fit parameters

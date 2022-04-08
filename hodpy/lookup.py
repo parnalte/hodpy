@@ -29,9 +29,9 @@ def read_hod_param_file(hod_param_file):
 
 path = get_lookup_dir()
 
-# MXXL simulation
-mxxl_mass_function = path+"/mf_fits.dat"
-mxxl_snapshots     = path+"/mxxl_snapshots.dat"
+# Pino simulation
+Pino_mass_function = path+"/mf_fits.dat"
+Pino_snapshots     = path+"/Pino_snapshots.dat"
 
 # HOD parameters for BGS mock
 bgs_hod_parameters    = path+"/hod_params.dat"
@@ -44,7 +44,8 @@ satellite_lookup_file = path+"/satellite_magnitudes.npy" # will be created if do
 # k-corrections
 kcorr_file = path+"/k_corr_rband_z01.dat"
 
-# SDSS/GAMA luminosity functions
-sdss_lf_tabulated = path+"/sdss_cumulative_lf.dat"
-gama_lf_fits      = path+"/lf_params.dat"
+# miniJPAS luminosity functions
+miniJPAS_lf_tabulated = path+"/miniJPAS_cumulative_lf_0.4_log_interp.dat"
+#miniJPAS_lf_tabulated = path+"/sdss_cumulative_lf.dat" the original one
+gama_lf_fits      = path+"/lf_params.dat" # describe the GAMA catelogue.
 target_lf         = path+"/target_lf.dat" # will be created if doesn't exist

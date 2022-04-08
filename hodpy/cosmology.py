@@ -112,15 +112,13 @@ class Cosmology(object):
         return self.cosmo_nbodykit.scale_independent_growth_rate(z)
 
     
-
-class CosmologyMXXL(Cosmology):
+class CosmologyPino(Cosmology):
     
     def __init__(self):
-        cosmo_nbody = cosmology_nbodykit.WMAP5
-        cosmo_nbody = cosmo_nbody.clone(Omega0_b=0.045, Omega0_cdm=0.25-0.045, h=0.73, n_s=1)
-        cosmo_nbody = cosmo_nbody.match(sigma8=0.9)
+        cosmo_nbody = cosmology_nbodykit.Planck15
+        cosmo_nbody = cosmo_nbody.clone(Omega0_b=0.0486, Omega0_cdm=0.3089-0.0486, h=0.6774, n_s=0.9667)
+        cosmo_nbody = cosmo_nbody.match(sigma8=0.8161)
         super().__init__(cosmo_nbody)
-        
-        
-    
+
+
 

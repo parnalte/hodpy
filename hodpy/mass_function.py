@@ -4,7 +4,7 @@ from scipy.interpolate import RegularGridInterpolator
 from scipy.optimize import curve_fit
 
 from hodpy.power_spectrum import PowerSpectrum
-from hodpy.cosmology import CosmologyMXXL
+from hodpy.cosmology import CosmologyPino
 from hodpy import lookup
 
 
@@ -104,20 +104,20 @@ class MassFunction(object):
 
         
 
-class MassFunctionMXXL(object):
+class MassFunctionPino(object):
     """
-    Class containing the fits to the MXXL halo mass function
+    Class containing the fits to the Pino halo mass function
 
     Args:
         mf_fits_file: Tabulated file of the best fit mass function parameters
     """
-    def __init__(self, mf_fits_file=lookup.mxxl_mass_function):
+    def __init__(self, mf_fits_file=lookup.Pino_mass_function):
         
         #self.power_spectrum = power_spectrum
-        self.cosmology = CosmologyMXXL()
+        self.cosmology = CosmologyPino()
         self.power_spectrum = PowerSpectrum(self.cosmology)
         
-        # read in MXXL mass function fit parameters
+        # read in Pino mass function fit parameters
         snap, redshift, A, a, p = \
                    np.loadtxt(mf_fits_file, skiprows=1, unpack=True)
         
