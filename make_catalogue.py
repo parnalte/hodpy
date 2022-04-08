@@ -2,10 +2,10 @@
 from __future__ import print_function
 import numpy as np
 
-from hodpy.halo_catalogue import MXXLCatalogue
+from hodpy.halo_catalogue import PinoCatalogue
 from hodpy.galaxy_catalogue import BGSGalaxyCatalogue
-from hodpy.cosmology import CosmologyMXXL
-from hodpy.mass_function import MassFunctionMXXL
+from hodpy.cosmology import CosmologyPino
+from hodpy.mass_function import MassFunctionPino
 from hodpy.hod_bgs import HOD_BGS
 from hodpy.k_correction import GAMA_KCorrection
 from hodpy.colour import Colour
@@ -18,7 +18,7 @@ def main(input_file, output_file, mag_faint):
     warnings.filterwarnings("ignore")
 
     # create halo catalogue
-    halo_cat = MXXLCatalogue(input_file)
+    halo_cat = PinoCatalogue(input_file)
 
     # empty galaxy catalogue
     gal_cat  = BGSGalaxyCatalogue(halo_cat)
@@ -35,7 +35,7 @@ def main(input_file, output_file, mag_faint):
     gal_cat.add_colours(col)
 
     # use colour-dependent k-correction to get apparent magnitude
-    kcorr = GAMA_KCorrection(CosmologyMXXL())
+    kcorr = GAMA_KCorrection(CosmologyPino())
     gal_cat.add_apparent_magnitude(kcorr)
 
     # cut to galaxies brighter than apparent magnitude threshold
@@ -48,8 +48,8 @@ def main(input_file, output_file, mag_faint):
     
 if __name__ == "__main__":
     
-    input_file = "input/halo_catalogue_small.hdf5"
-    output_file = "output/galaxy_catalogue.hdf5"
+    input_file = "input/halo_catalogue_pinocchio.hdf5"
+    output_file = "output/galaxy_catalogue_pinocchio.hdf5"
     mag_faint = 20.0 # faintest apparent magnitude
     
     main(input_file, output_file, mag_faint)

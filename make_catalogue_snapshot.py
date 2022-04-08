@@ -42,8 +42,8 @@ def main(input_file, output_file, snapshot, mag_faint):
     
 if __name__ == "__main__":
     
-    input_file = "input/snapshot_58_small.hdf5"
-    output_file = "output/galaxy_catalogue_snapshot.hdf5"
+    input_file = "input/snapshot_pinocchio_0.hdf5"
+    output_file = "output/galaxy_catalogue_snapshot_pinocchio_0.hdf5"
     snapshot = 58
     mag_faint = -18.0 # faintest absolute magnitude
     
